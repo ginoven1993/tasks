@@ -14,9 +14,9 @@
                             <a href="javascript:void(0);"><img src="{{asset('assets2/img/icons/product.svg')}}" alt="img"><span> Espace de Travails</span> <span class="menu-arrow"></span></a>
                             <ul>
                                 <li><a class="" href="/projets">Projets</a></li>
-                                 <li><a class="" href="/taches">Taches</a></li>
-                               {{-- <li><a href="#">Tickets</a></li>
-                                <li><a href="#">Espace Document</a></li> --}}
+                                <li><a class="" href="/taches">Taches</a></li>
+                                <li><a class="" href="/tickets">Tickets</a></li>
+                                <li><a class="" href="/documents">Espace Documents</a></li>
                             </ul>
                     </li>
                     {{-- <li class="submenu">

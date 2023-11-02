@@ -41,16 +41,13 @@ class TachesController extends Controller
         try{
             if ($request->isMethod('post')) {
 
-                
-                $projet = getProjets()->id;
-
                 Taches::create([
                     'nom_tache' => $request->nom_tache,
                     'description' => $request->description,
                     'duree' => $request->duree,
                     'temps' => $request->temps, 
                     'status' => $request->status,
-                    'projet_id' => $projet,
+                    'projet_id' => $request->projet_id,
                 ]);
 
                 return  redirect()->back()->with('flash_message_success', 'La tache crée avec succès');

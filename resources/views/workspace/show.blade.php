@@ -17,23 +17,32 @@ Détails Projets
     <div class="col-lg-12 col-sm-12 col-12 d-flex">
         <div class="card flex-fill" style="box-shadow: rgba(77, 77, 84, 0.2) 0px 7px 29px 0px;padding: 1rem;">
                 <div class="row mb-5">
-                    <div class="col-lg-4 col-sm-12">
+                    <div class="col-lg-3 col-sm-12">
                          <h6><strong>Nom du Projet</strong></h6>
                          <p>{{$projets->nom_projet}}</p>
                     </div> <br>
-                    <div class="col-lg-4 col-sm-12">
+                    <div class="col-lg-3 col-sm-12">
                         <h6><strong>Date de début</strong></h6>
                         <p>{{$projets->date_debut}}</p>
                    </div>
-                   <div class="col-lg-4 col-sm-12">
-                    <h6><strong>Status</strong></h6>
-                    @if ($projets->status == 0 )
-                        <span class="badges bg-lightyellow">En Progression</span>
-                        @elseif (($projets->status == 1 ))
-                            <span class="badges bg-lightred">Achevé</span>
-                    @endif 
-                   
-               </div>
+                   <div class="col-lg-3 col-sm-12">
+                        <h6><strong>Status</strong></h6>
+                        @if ($projets->status == 0 )
+                            <span class="badges bg-lightred">En Attente</span>
+                            @elseif (($projets->status == 1 ))
+                                <span class="badges bg-lightyellow">En Progression</span>
+                                @else
+                                    <span class="badges bg-lightgreen">Achevé</span>
+                        @endif                 
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <a class="me-3" href="">
+                            <img src="{{asset('assets2/img/icons/edit.svg')}}" alt="img">
+                        </a>
+                        <a class="me-3 confirm-text" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteprojet"  data-bs-placement="top" title="Delete projet">
+                            <img src="{{asset('assets2/img/icons/delete.svg')}}" alt="img">
+                        </a>
+                   </div>
 
                 </div>
                 <div class="row mb-5">
@@ -202,7 +211,7 @@ Détails Projets
     <div class="col-lg-12 col-sm-12 col-12 d-flex">
         <div class="card flex-fill" style="box-shadow: rgba(77, 77, 84, 0.2) 0px 7px 29px 0px;">
             <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                <h4 class="card-title mb-0">Progression/Timesheets</h4>
+                <h4 class="card-title mb-0">Progression/Timesheet</h4>
                 <div class="page-header">
                     <div class="page-btn">
                         <a class="btn btn-added" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addsheet"  data-bs-placement="top" title="Add task">
@@ -212,11 +221,37 @@ Détails Projets
                 </div>
             </div> <hr> 
 
+            <div class="card-body"> 
+                <div class="row">
+                    @foreach ($productivity as $prod)
+                        <div class="productivity">
+                            <h5 class="d-flex align-items-center"><img width="40"  src="{{asset('assets2/avatars/'.$prod->avatar)}}" alt="img" id="blah">
+                                <strong>&nbsp; {{$prod->name}} [{{$prod->nom_tache}}]</strong> 
+                            </h5>
+                            <div class="time">
+                            <p style="color: blue"><img src="{{asset('assets2/img/icons/users1.svg')}}"> {{$prod->date}} &nbsp;&nbsp;<span><img src="{{asset('assets2/img/icons/time.svg')}}"> Début: {{$prod->heure_debut}} | Fin: {{$prod->heure_fin}}</span> </p>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li><a href="#" class="dropdown-item">Modifier</a></li>
+                                    <li><a href="#" class="dropdown-item">Supprimer</a></li>
+                                </ul>
+                            </div>
+                            </div> 
+                            <p>{{strip_tags($prod->description)}}</p>  
+                                        
+                        </div> <hr> <hr>
+                    @endforeach                  
+                </div>   
+            </div> 
+
             <div class="modal custom-modal fade" id="addsheet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold">Nouvelle Progression</h4>
+                        <h4 class="modal-title w-100 font-weight-bold">Nouveau Timesheet</h4>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -224,7 +259,7 @@ Détails Projets
                         <div class="modal-body">               
                                 <div class="card-body">
                                     <div class="row">
-                                        <form class="form-login" action="" method="post" enctype="multipart/form-data">
+                                        <form class="form-login" action="{{route('timesheets.store')}}" method="post" enctype="multipart/form-data">
                                             @csrf                   
                                                 <div class="col-lg-12 col-sm-12 col-12">
                                                     <div class="form-group">
@@ -267,9 +302,9 @@ Détails Projets
                                                     <div class="col-lg-12 col-sm-12 col-12">
                                                         <div class="form-group">
                                                             <label>Description de la progression/Timesheet</label>
-                                                            <textarea id="summernote" name="description" cols="" rows="3" required></textarea>
+                                                            <textarea id="summernote" name="description" cols="" rows="" required></textarea>
                                                     </div>
-                                                    </div>                           
+                                                    <input type="hidden" name="projet_id" value="{{ $projets->id }}">                                                                            
                                             <div class="col-lg-12 d-flex justify-content-center">
                                                 <button type="submit" class="btn btn-submit me-2">Ajouter</button>
                                                 <button type="button" data-bs-dismiss="modal" class="btn btn-cancel">Annuler</button>
@@ -282,48 +317,6 @@ Détails Projets
                 </div>
             </div>   
 
-            <div class="card-body"> 
-                <div class="row">
-                    <div class="productivity">
-                        <h5> <strong>Developpement du Header et du Footer</strong> </h5>
-                        <div class="time">
-                           <p> Jeudi, 24 Oct 2023 &nbsp;&nbsp;<span>09h00  a  17h30</span> </p>
-                           <div class="dropdown">
-                               <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
-                                   <i class="fa fa-ellipsis-v"></i>
-                               </a>
-                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                   <li><a href="#" class="dropdown-item">Voir</a></li>
-                                   <li><a href="#" class="dropdown-item">Modifier</a></li>
-                                   <li><a href="#" class="dropdown-item">Supprimer</a></li>
-                               </ul>
-                           </div>
-                        </div> 
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo, tempora?</p>  
-                                    
-                    </div> <hr> <hr>
-                    <div class="productivity">
-                        <h5> <strong>Developpement du Header et du Footer</strong> </h5>
-                        <div class="time">
-                           <p> Jeudi, 24 Oct 2023 &nbsp;&nbsp;<span>09h00  a  17h30</span> </p>
-                           <div class="dropdown">
-                               <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
-                                   <i class="fa fa-ellipsis-v"></i>
-                               </a>
-                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                   <li><a href="#" class="dropdown-item">Voir</a></li>
-                                   <li><a href="#" class="dropdown-item">Modifier</a></li>
-                                   <li><a href="#" class="dropdown-item">Supprimer</a></li>
-                               </ul>
-                           </div>
-                        </div>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo, tempora?</p>  
-                                    
-                    </div> <hr>
-                </div>
-                 
-                
-            </div> 
         </div>
     </div>
 </div>

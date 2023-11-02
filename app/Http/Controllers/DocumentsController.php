@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\documents;
+use App\Models\Documents;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
@@ -12,7 +12,9 @@ class DocumentsController extends Controller
      */
     public function index()
     {
-        //
+        $documents = Documents::all();
+        
+        return view('documents.index', compact('documents'));
     }
 
     /**
@@ -28,7 +30,26 @@ class DocumentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $request->validate([
+                'documents' => 'required|mimes:pdf,docx|max:2048',
+            ]);
+        
+            $document = $request->file('documents')->store('documents');
+            // $chemin = $document->store('documents'); 
+        $user = getAuth()->id;
+            
+            Documents::create([
+                'user_id' => $user,
+                'nom' => $request->nom,
+                'documents' => basename($document),
+                'rights' => true,
+            ]);
+            return  redirect()->back()->with('flash_message_success', 'Document ajouté avec succès');
+        } 
+        catch(\Exception $e) {
+            return  redirect()->back()->with('flash_message_error', 'Une Erreur est survenu'.$e->getMessage());
+        }
     }
 
     /**

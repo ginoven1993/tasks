@@ -79,7 +79,19 @@ class ProjetController extends Controller
         $details = DB::table('users')->select('users.id as uid',
         'users.avatar as collab_avatar',
         'users.name as collab_name')->whereIn('users.id', $uses)->orderBy('users.created_at', 'desc')->get(); 
-        return view('workspace.show', compact('projets','details','taches')); 
+
+        $productivity = DB::table('timesheets')
+        ->join('taches', 'timesheets.tache_id', '=', 'taches.id')
+        ->join('users', 'timesheets.user_id', '=', 'users.id')->select('timesheets.description as description',
+        'timesheets.date as date',
+        'timesheets.heure_debut as heure_debut',
+        'timesheets.heure_fin as heure_fin',
+        'taches.nom_tache as nom_tache',
+        'users.avatar as avatar',
+        'users.name as name'
+        )->where('timesheets.projet_id', $id)->orderBy('timesheets.created_at', 'desc')->get();
+
+        return view('workspace.show', compact('projets','details','taches','productivity')); 
     }
 
     /**

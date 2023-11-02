@@ -15,6 +15,7 @@ class Taches extends Model
         'nom_tache',
         'description',
         'duree',
+        'temps',
         'status',
         'projet_id'
     ];

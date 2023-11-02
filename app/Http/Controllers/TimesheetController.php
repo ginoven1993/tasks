@@ -31,15 +31,16 @@ class TimesheetController extends Controller
         try{
             if ($request->isMethod('post')) {
 
-                $projet = getProjets()->id;
+                // $projet = getProjets()->id;
                 $user = getAuth()->id;
 
                 Timesheets::create([
                     'sujet' => $request->sujet,
                     'description' => $request->description,
+                    'date' => $request->date,
                     'heure_debut' => $request->heure_debut,
                     'heure_fin' => $request->heure_fin, 
-                    'projet_id' => $projet,
+                    'projet_id' => $request->projet_id,
                     'tache_id' => $request->tache_id,
                     'user_id' => $user,
                 ]);

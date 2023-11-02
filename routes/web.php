@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Documents;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,5 +68,23 @@ Route::match(['get', 'post'], '/timesheets/store', 'App\Http\Controllers\Timeshe
 Route::match(['get', 'post'], '/timesheets/edit/{id}', 'App\Http\Controllers\TimesheetController@update')->name('timesheets.update');
 Route::match(['get', 'post'], '/timesheets/delete/{id}', 'App\Http\Controllers\TimesheetController@destroy');
 
+Route::match(['get', 'post'], '/tickets', 'App\Http\Controllers\TicketsController@index');
+Route::match(['get', 'post'], '/tickets/add', 'App\Http\Controllers\TicketsController@create');
+Route::match(['get', 'post'], '/tickets/show/{id}', 'App\Http\Controllers\TicketsController@show');
+Route::match(['get', 'post'], '/tickets/store', 'App\Http\Controllers\TicketsController@store')->name('tickets.store');
+Route::match(['get', 'post'], '/tickets/edit/{id}', 'App\Http\Controllers\TicketsController@update')->name('tickets.update');
+Route::match(['get', 'post'], '/tickets/delete/{id}', 'App\Http\Controllers\TicketsController@destroy');
 
+Route::match(['get', 'post'], '/documents', 'App\Http\Controllers\DocumentsController@index');
+Route::match(['get', 'post'], '/documents/store', 'App\Http\Controllers\DocumentsController@store')->name('documents.store');
+
+Route::get('/telecharger/{document}', function ($id) {
+    $document = Documents::findOrFail($id);
+    
+    if ($document->rights) {
+        return response()->download(storage_path("app/documents/{$document->documents}"));
+    } else {
+        abort(403, 'Accès refusé.'); // Ou redirigez l'utilisateur vers une page d'erreur personnalisée.
+    }
+})->name('telecharger')->middleware('auth'); // Assurez-vous que l'utilisateur est authentifié pour télécharger les documents.
 

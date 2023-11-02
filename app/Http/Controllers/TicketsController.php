@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Projets;
 use App\Models\tickets;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketsController extends Controller
 {
@@ -12,7 +14,17 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        //
+        $ticketss = tickets::all();
+        $tickets = DB::table('tickets')->join('projets', 'tickets.projet_id', '=', 'projets.id')->select(
+        'tickets.id as id',
+        'tickets.status as status',
+        'tickets.ticket_subject as ticket_subject',
+        'tickets.description as description',
+        'tickets.nature as nature',
+        'tickets.numero as numero',
+        'projets.nom_projet as nom_projet')->orderBy('tickets.created_at', 'desc')->get(); 
+       
+        return view('tickets.index', compact('tickets', 'ticketss'));
     }
 
     /**
@@ -20,7 +32,8 @@ class TicketsController extends Controller
      */
     public function create()
     {
-        //
+        $projets = Projets::all();
+        return view('tickets.add', compact('projets'));
     }
 
     /**
@@ -28,7 +41,27 @@ class TicketsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            if ($request->isMethod('post')) {
+
+                tickets::create([
+                    'numero' => $request->numero,
+                    'nature' => $request->nature,
+                    'description' => $request->description,
+                    'ticket_subject' => $request->ticket_subject, 
+                    'status' => $request->status,
+                    'projet_id' => $request->projet_id,
+                ]);
+
+                return  redirect()->back()->with('flash_message_success', 'Le Ticket est crée avec succès');
+            } else {
+                return  redirect()->back()->with('flash_message_error', 'La requete ne passe pas');
+            }      
+        }
+        catch (\Exception $e) {
+
+            return  redirect()->back()->with('flash_message_error', 'Une Erreur est survenu'.$e->getMessage());
+        }
     }
 
     /**
