@@ -15,12 +15,10 @@ Roles
         <a class="btn btn-added" href="/roles/add"><img src="{{asset('assets2/img/icons/plus.svg')}}" alt="img" class="me-1">Ajouter Role</a> &nbsp;&nbsp;&nbsp;
     </div>
 </div>
-    
+
 <div class="card">
     <div class="card-body">
-
             <div class="table-top">
-
                         <div class="search-set">
                             <div class="search-input">
                                 <a class="btn btn-searchset"><img src="{{asset('assets2/img/icons/search-white.svg')}}" alt="img"></a>

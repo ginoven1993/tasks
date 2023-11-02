@@ -36,7 +36,7 @@ Dashboard
                 </div>
                 <div class="dash-widgetcontent">
                     <h5><span class="counters" data-count="00">00</span></h5>
-                    <h6> Espace de Travails </h6>
+                    <h6> Workspace </h6>
                 </div>
             </div>
         </div>

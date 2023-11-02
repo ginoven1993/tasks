@@ -54,7 +54,7 @@
                                     <a href="activities.html">
                                         <div class="media d-flex">
                                             <span class="avatar flex-shrink-0">
-                                                <img alt="" src="{{asset('assets2/img/profiles/avatar-02.jpg')}}">
+                                                <img alt="" src="{{asset('assets2/img/avatar2.jpg')}}">
                                             </span>
                                             <div class="media-body flex-grow-1">
                                                 <p class="noti-details"><span class="noti-title">Hervé</span> Nouvelle tache ajoutée <span class="noti-title">Correction</span></p>
@@ -94,7 +94,7 @@
                     <a class="dropdown-item" href=""> <i class="me-2" data-feather="user"></i> Mon Profile</a>
                     <a class="dropdown-item" href=""><i class="me-2" data-feather="settings"></i>Réglages</a>
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="/admin/logout"><img src="{{asset('assets2/img/icons/log-out.svg')}}" class="me-2" alt="img">Deconnexion</a>
+                    <a class="dropdown-item logout pb-0" href="#"><img src="{{asset('assets2/img/icons/log-out.svg')}}" class="me-2" alt="img">Deconnexion</a>
                 </div>
             </div>
         </li>
@@ -104,9 +104,9 @@
     <div class="dropdown mobile-user-menu">
         <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="">Mon Profile</a>
-            <a class="dropdown-item" href="">Réglages</a>
-            <a class="dropdown-item" href="/logout">Deconnexion</a>
+            <a class="dropdown-item" href="#">Mon Profile</a>
+            <a class="dropdown-item" href="#">Réglages</a>
+            <a class="dropdown-item" href="#">Deconnexion</a>
         </div>
     </div>
     
