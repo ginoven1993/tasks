@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Documents;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,4 +43,49 @@ Route::delete('/roles/{role}/permissions/{permission}', 'App\Http\Controllers\Ro
 Route::post('/permissions/{permission}/roles', 'App\Http\Controllers\PermissionController@assignRole');
 Route::delete('/permissions/{permission}/roles/{role}', 'App\Http\Controllers\PermissionController@removeRole');
 
+
+Route::match(['get', 'post'], '/collaborateurs', 'App\Http\Controllers\CollaborateursController@index');
+Route::match(['get', 'post'], '/collaborateurs/show/{id}', 'App\Http\Controllers\CollaborateursController@show');
+Route::match(['get', 'post'], '/collaborateurs/store', 'App\Http\Controllers\CollaborateursController@store')->name('collaborateurs.store');
+Route::match(['get', 'post'], '/collaborateurs/edit/{id}', 'App\Http\Controllers\CollaborateursController@update');
+Route::match(['get', 'post'], '/collaborateurs/delete/{id}', 'App\Http\Controllers\CollaborateursController@destroy');
+
+Route::match(['get', 'post'], '/projets', 'App\Http\Controllers\ProjetController@index');
+Route::match(['get', 'post'], '/projets/show/{id}', 'App\Http\Controllers\ProjetController@show');
+Route::match(['get', 'post'], '/projets/store', 'App\Http\Controllers\ProjetController@store')->name('projets.store');
+Route::match(['get', 'post'], '/projets/edit/{id}', 'App\Http\Controllers\ProjetController@update');
+Route::match(['get', 'post'], '/projets/delete/{id}', 'App\Http\Controllers\ProjetController@destroy');
+
+Route::match(['get', 'post'], '/taches', 'App\Http\Controllers\TachesController@index');
+Route::match(['get', 'post'], '/taches/show/{id}', 'App\Http\Controllers\TachesController@show');
+Route::match(['get', 'post'], '/taches/store', 'App\Http\Controllers\TachesController@store')->name('taches.store');
+Route::match(['get', 'post'], '/taches/edit/{id}', 'App\Http\Controllers\TachesController@update')->name('taches.update');
+Route::match(['get', 'post'], '/taches/delete/{id}', 'App\Http\Controllers\TachesController@destroy');
+
+Route::match(['get', 'post'], '/timesheets', 'App\Http\Controllers\TimesheetController@index');
+Route::match(['get', 'post'], '/timesheets/show/{id}', 'App\Http\Controllers\TimesheetController@show');
+Route::match(['get', 'post'], '/timesheets/store', 'App\Http\Controllers\TimesheetController@store')->name('timesheets.store');
+Route::match(['get', 'post'], '/timesheets/edit/{id}', 'App\Http\Controllers\TimesheetController@update')->name('timesheets.update');
+Route::match(['get', 'post'], '/timesheets/delete/{id}', 'App\Http\Controllers\TimesheetController@destroy');
+
+Route::match(['get', 'post'], '/tickets', 'App\Http\Controllers\TicketsController@index');
+Route::match(['get', 'post'], '/tickets/add', 'App\Http\Controllers\TicketsController@create');
+Route::match(['get', 'post'], '/tickets/show/{id}', 'App\Http\Controllers\TicketsController@show');
+Route::match(['get', 'post'], '/tickets/store', 'App\Http\Controllers\TicketsController@store')->name('tickets.store');
+Route::match(['get', 'post'], '/tickets/edit/{id}', 'App\Http\Controllers\TicketsController@update')->name('tickets.update');
+Route::match(['get', 'post'], '/tickets/delete/{id}', 'App\Http\Controllers\TicketsController@destroy');
+
+Route::match(['get', 'post'], '/documents', 'App\Http\Controllers\DocumentsController@index');
+Route::match(['get', 'post'], '/documents/store', 'App\Http\Controllers\DocumentsController@store')->name('documents.store');
+Route::match(['get', 'post'], '/documents/update/{id}', 'App\Http\Controllers\DocumentsController@update')->name('documents.update');
+
+Route::get('/telecharger/{document}', function ($id) {
+    $document = Documents::findOrFail($id);
+    
+    if ($document->rights) {
+        return response()->download(storage_path("app/documents/{$document->documents}"));
+    } else {
+        abort(403, 'Accès refusé.'); // Ou redirigez l'utilisateur vers une page d'erreur personnalisée.
+    }
+})->name('telecharger')->middleware('auth'); // Assurez-vous que l'utilisateur est authentifié pour télécharger les documents.
 
