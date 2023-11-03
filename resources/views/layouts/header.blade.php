@@ -77,7 +77,7 @@
     
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
-            <span class="user-img"><img src="{{asset('assets2/img/avatar2.jpg')}}" alt="">
+            <span class="user-img"><img src="{{asset('assets2/avatars/'.getAuth()->avatar)}}" alt="">
             <span class="status online"></span></span>
             </a>
             <div class="dropdown-menu menu-drop-user">
@@ -86,15 +86,14 @@
                         <span class="user-img"><img src="{{asset('assets2/img/avatar2.jpg')}}" alt="">
                         <span class="status online"></span></span>
                         <div class="profilesets">
-                            <h6></h6>
-                            <h5></h5>
+                            <h6>{{getAuth()->name}}</h6>
+                            <h5>{{getAuth()->role}}</h5>
                         </div>
                     </div>
                     <hr class="m-0">
-                    <a class="dropdown-item" href=""> <i class="me-2" data-feather="user"></i> Mon Profile</a>
-                    <a class="dropdown-item" href=""><i class="me-2" data-feather="settings"></i>Réglages</a>
+                    <a class="dropdown-item" href="/profile/{{getAuth()->id}}"> <i class="me-2" data-feather="user"></i> Mon Profile</a>                    
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="#"><img src="{{asset('assets2/img/icons/log-out.svg')}}" class="me-2" alt="img">Deconnexion</a>
+                    <a class="dropdown-item logout pb-0" href="/logout"><img src="{{asset('assets2/img/icons/log-out.svg')}}" class="me-2" alt="img">Deconnexion</a>
                 </div>
             </div>
         </li>

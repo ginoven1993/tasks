@@ -13,7 +13,7 @@ class DocumentsController extends Controller
     public function index()
     {
         $documents = Documents::all();
-        
+        $id = session('id');
         return view('documents.index', compact('documents'));
     }
 
@@ -35,14 +35,19 @@ class DocumentsController extends Controller
                 'documents' => 'required|mimes:pdf,docx|max:2048',
             ]);
         
-            $document = $request->file('documents')->store('documents');
+            if ($request->hasFile('documents')) {
+                $image = $request->documents;
+                $name =  uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move('assets2/documents/', $name);
+            }
+            // $document = $request->file('documents')->store('documents');
             // $chemin = $document->store('documents'); 
-        $user = getAuth()->id;
+            $user = getAuth()->id;
             
             Documents::create([
                 'user_id' => $user,
                 'nom' => $request->nom,
-                'documents' => basename($document),
+                'documents' => $name,
                 'rights' => true,
             ]);
             return  redirect()->back()->with('flash_message_success', 'Document ajouté avec succès');
@@ -71,9 +76,24 @@ class DocumentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, documents $documents)
+    public function update(Request $request, $iddoc)
     {
-        //
+        try{
+            $rights = $request->rights;
+            // dd($rights);
+             if($rights !== null){
+                Documents::where(['id' => $iddoc])->update([
+                    'rights' => $rights
+                ]);
+                return  redirect()->back()->with('flash_message_success', 'Accès modifié avec succès');
+             } else {
+                return  redirect()->back()->with('flash_message_error', 'Pas d\'accès choisi');
+             }
+           
+        } 
+        catch(\Exception $e) {
+            return  redirect()->back()->with('flash_message_error', 'Une Erreur est survenu'.$e->getMessage());
+        }
     }
 
     /**

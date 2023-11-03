@@ -23,6 +23,8 @@ Route::match(['get', 'post'], '/login', 'App\Http\Controllers\AuthentificationCo
 Route::match(['get', 'post'], '/create', 'App\Http\Controllers\AuthentificationController@create')->name('login');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index');
+Route::get('/logout', 'App\Http\Controllers\DashboardController@logout');
+Route::get('/profile/{id}', 'App\Http\Controllers\DashboardController@profile');
 
 Route::match(['get', 'post'], '/roles', 'App\Http\Controllers\RoleController@show');
 Route::match(['get', 'post'], '/roles/permissions/{id}', 'App\Http\Controllers\RoleController@add_permission');
@@ -77,6 +79,8 @@ Route::match(['get', 'post'], '/tickets/delete/{id}', 'App\Http\Controllers\Tick
 
 Route::match(['get', 'post'], '/documents', 'App\Http\Controllers\DocumentsController@index');
 Route::match(['get', 'post'], '/documents/store', 'App\Http\Controllers\DocumentsController@store')->name('documents.store');
+Route::match(['get', 'post'], '/documents/update/{id}', 'App\Http\Controllers\DocumentsController@update')->name('documents.update');
+
 
 Route::get('/telecharger/{document}', function ($id) {
     $document = Documents::findOrFail($id);
